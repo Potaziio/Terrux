@@ -6,6 +6,7 @@ namespace Terrux {
 
         // Catch the window and change the width and height
         Window* win = (Window*)glfwGetWindowUserPointer(window);
+        win->game->camera->updateAspect((float)width / (float)height);
         win->width = width;
         win->height = height;
     }
@@ -26,7 +27,7 @@ namespace Terrux {
 
         glfwMakeContextCurrent(window);
 
-        glfwSwapInterval(1);
+        glfwSwapInterval(swapInterval);
 
         GLenum err;
         if ((err = glewInit()) != GLEW_OK) {
@@ -58,6 +59,9 @@ namespace Terrux {
     void Window::OnUpdate() {
         const float timeDelta = 1000.0f/3000.0f;
         float dt = 0.0f;
+
+        game->level = new Level();
+        game->level->game = game;
         game->window = this;
         game->OnStart();
 
@@ -92,6 +96,8 @@ namespace Terrux {
         std::cout << "Exiting..." << std::endl;
         game->OnExit();
         glfwTerminate();
+
+        delete game->level;
         delete game;
     }
 

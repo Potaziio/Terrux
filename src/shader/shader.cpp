@@ -103,8 +103,29 @@ namespace Terrux {
         }
 
         void Shader::free() {
-                glDeleteProgram(shaderProgram);
-                printf("Deleting shader: %s, %s\n", vPath.c_str(), fPath.c_str());
+            glDeleteProgram(shaderProgram);
+            printf("Deleting shader: %s, %s\n", vPath.c_str(), fPath.c_str());
+        }
+
+        unsigned int Shader::getProgram() {
+            return shaderProgram;
+        }
+
+        // Sending info methods
+
+        void Shader::sendMat4(const char* name, glm::mat4 mat) {
+            use();
+            glUniformMatrix4fv(glGetUniformLocation(shaderProgram, name), 1, GL_FALSE, glm::value_ptr(mat));
+        }
+
+        void Shader::sendFloat(const char* name, float val) {
+            use();
+            glUniform1f(glGetUniformLocation(shaderProgram, name), val);
+        }
+
+        void Shader::sendInt(const char* name, int val) {
+            use();
+            glUniform1i(glGetUniformLocation(shaderProgram, name), val);
         }
     }
 }
